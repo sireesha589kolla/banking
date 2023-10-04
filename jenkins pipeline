@@ -1,0 +1,56 @@
+pipeline {
+    agent {
+        label 'centos1'  // Run on a node with the label 'centos1'
+    }
+    
+    stages {
+       
+       stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/pythonkid2/Banking_Project.git'
+            }
+        }
+       
+       
+        stage('Build and Docker Image') {
+            steps {
+                sh 'mvn clean install'
+                sh 'docker build -t banking-java-app:latest .'
+            }
+        }
+
+        stage('Stop and Remove Container') {
+            steps {
+                script {
+                    def containerExists = sh(script: 'docker ps -a | grep banking-java-app', returnStatus: true)
+                    if (containerExists == 0) {
+                        sh 'docker stop banking-java-app'
+                        sh 'docker rm -f banking-java-app'
+                    }
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                sh 'docker run -d -p 8888:8080 --name banking-java-app banking-java-app'
+            }
+        }
+
+        stage('Run Maven Tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Docker Login, Commit, and Push') {
+            steps {
+                
+                    sh "docker login -u mjcmathew -p dckr_pat_gHv0cSaN5HNCKKmPnGzwRdssdkef-Z928"
+                    sh 'docker commit banking-java-app mjcmathew/banking-java-app:latest'
+                    sh 'docker push mjcmathew/banking-java-app:latest'
+                
+            }
+        }
+    }
+}
