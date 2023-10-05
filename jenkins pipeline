@@ -46,7 +46,7 @@ pipeline {
         stage('Docker Login, Commit, and Push') {
             steps {
                 
-                    sh "docker login -u mjcmathew -p dckr_pat_gHv0cSaN5HNCKKmPnGzwRdssdkef-Z928"
+                    sh "docker login -u mjcmathew -p dckr_pat_gHv0cSaN5HNCvKKmPnGzwRdssdkef-Z928"
                     sh 'docker commit banking-java-app mjcmathew/banking-java-app:latest'
                     sh 'docker push mjcmathew/banking-java-app:latest'
                 
