@@ -21,10 +21,10 @@ public class AccountController {
     @RequestMapping("/seeddata")
     public String seedData() {
         System.out.println("Inside seeddata");
-        Account account1 = new Account("1", "Vilas", "Vilas Address", "123456789");
+        Account account1 = new Account("25", "sireesha", "sireesha Address", "123456789");
         accountSvc.addAccount(account1);
 
-        Account account2 = new Account("2", "Tousif", "Tousif Address", "987654321");
+        Account account2 = new Account("26", "sravan", "sravan Address", "987654321");
         accountSvc.addAccount(account2);
 
         return "Data seeded successfully!!!";
